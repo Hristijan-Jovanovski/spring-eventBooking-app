@@ -19,9 +19,10 @@ public class Comment {
     @ManyToOne
     Event event;
 
-    public Comment(String comment, User user) {
+    public Comment(String comment, User user,Event event) {
         this.comment = comment;
         this.user = user;
+        this.event=event;
     }
 }
 

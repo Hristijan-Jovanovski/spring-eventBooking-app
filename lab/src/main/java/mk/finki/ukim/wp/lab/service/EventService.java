@@ -9,6 +9,7 @@ public interface EventService {
     List<Event> listAll();
     List<Event> searchEvents(String text);
      Optional<Event> saveEvents(Event event);
+    Optional<Event> saveEventsCom(Event event);
     Optional<Event> findById(Long id);
     public void deleteById(Long id);
     List<Event> findByLocation(Long LocationID);

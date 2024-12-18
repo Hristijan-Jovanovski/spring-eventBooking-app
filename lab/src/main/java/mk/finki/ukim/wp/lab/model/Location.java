@@ -28,6 +28,15 @@ public class Location {
         this.description = description;
         this.id = id;
     }
+    @Override
+    public String toString() {
+        return "Location{" +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", capacity='" + capacity + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
 
 

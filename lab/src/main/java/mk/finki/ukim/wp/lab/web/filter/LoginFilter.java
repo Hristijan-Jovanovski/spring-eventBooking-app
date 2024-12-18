@@ -6,15 +6,17 @@ import jakarta.servlet.annotation.WebInitParam;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mk.finki.ukim.wp.lab.model.User;
+import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
-
+@Profile("servlet")
 @WebFilter(filterName = "auth-filter", urlPatterns = "/*",
         dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD},
         initParams = {
                 @WebInitParam(name = "ignore-path", value = "/login"),
 
         })
+
 public class LoginFilter implements Filter {
     private String ignorePath;
 

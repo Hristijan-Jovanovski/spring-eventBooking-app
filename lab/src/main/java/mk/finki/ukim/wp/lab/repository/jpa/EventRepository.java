@@ -1,6 +1,7 @@
 package mk.finki.ukim.wp.lab.repository.jpa;
 
 import mk.finki.ukim.wp.lab.model.Event;
+import mk.finki.ukim.wp.lab.model.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.w3c.dom.events.EventTarget;
 
@@ -12,4 +13,5 @@ public interface EventRepository extends JpaRepository<Event,Long> {
     List<Event> findAllByNameLikeOrDescriptionLike(String name,String description);
     Optional<Event> findByName(String name);
     void deleteByName(String name);
+    List<Event> findAllByNameAndLocation(String name, Location location);
 }

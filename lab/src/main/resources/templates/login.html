@@ -32,9 +32,7 @@
                    required="">
         </p>
 
-        <th:block th:if="${hasError}">
-            <div th:text="${error}" class="text-danger"></div>
-        </th:block>
+        <div th:if="${param.error}" th:text="${param.error}" class="text-danger"></div>
 
         <button id="submit" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
         <a href="/register" class="btn btn-block btn-light">Don't have an account? Register here!</a>

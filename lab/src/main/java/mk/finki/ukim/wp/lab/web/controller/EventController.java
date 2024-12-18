@@ -7,6 +7,7 @@ import mk.finki.ukim.wp.lab.model.Location;
 import mk.finki.ukim.wp.lab.model.User;
 import mk.finki.ukim.wp.lab.service.EventService;
 import mk.finki.ukim.wp.lab.service.LocationService;
+import mk.finki.ukim.wp.lab.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,12 @@ import java.util.Optional;
 public class EventController {
     private final EventService eventService;
     private final LocationService locationService;
+    private final UserService userService;
 
-    public EventController(EventService eventService, LocationService locationService) {
+    public EventController(EventService eventService, LocationService locationService, UserService userService) {
         this.eventService = eventService;
         this.locationService = locationService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -52,24 +55,36 @@ public class EventController {
 
         model.addAttribute("events", events);
         model.addAttribute("error", error);
+
         return "listEvents";
+
     }
 
     @GetMapping("/add-form")
-    public String addEventPage(Model model) {
+    public String addEventPage(@RequestParam(required = false) String error, Model model) {
         List<Location> locations = this.locationService.findAll();
+
+
         model.addAttribute("location", locations);
+
+        model.addAttribute("error", error);
+
         return "add-event";
     }
+
 
     @PostMapping("/add")
     public String saveEvent(@RequestParam String name,
                             @RequestParam String description,
                             @RequestParam double popularityScore,
                             @RequestParam Long locationID) {
-        Event event = new Event(name, description, popularityScore, 1, locationService.findById(locationID).get());
-        eventService.saveEvents(event);
-        return "redirect:/events";
+        try {
+            Event event = new Event(name, description, popularityScore, 1, locationService.findById(locationID).get());
+            eventService.saveEvents(event);
+            return "redirect:/events";
+        }catch (RuntimeException e){
+            return "redirect:/events/add-form?error="+e.getMessage();
+        }
     }
 
     @GetMapping("/edit/{eventId}")
@@ -101,7 +116,7 @@ public class EventController {
         }
 
         if (comments.isEmpty()) {
-            comments.add(new Comment("No comments yet", new User("Admin", "ad", "a", "d")));
+            comments.add(new Comment("No comments yet", new User("Admin", "ad", "a", "d"),null));
         }
 
         model.addAttribute("comments", comments);
@@ -119,18 +134,21 @@ public class EventController {
             return "redirect:/events?error=EventNotFound";
         }
 
-        User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
+        String username =  request.getRemoteUser();
+        System.out.println(username);
+        if (username.isEmpty()){
             return "redirect:/events/details/" + id + "?error=UserNotLoggedIn";
         }
+        User user = userService.loadUserByUsername(username);
+
 
         Event event = eventOptional.get();
-        Comment newComment = new Comment(comment, user);
+        Comment newComment = new Comment(comment, user,event);
         if (event.getComments() == null) {
             event.setComments(new ArrayList<>());
         }
         event.getComments().add(newComment);
-        eventService.saveEvents(event);
+        eventService.saveEventsCom(event);
         return "redirect:/events/details/" + id;
     }
 }

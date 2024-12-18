@@ -20,7 +20,7 @@ public class Event {
     private Long id;
     @ManyToOne
     private Location location;
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
 
@@ -40,6 +40,16 @@ public class Event {
         this.available = 10;
         this.location=location;
 
+    }
+    @Override
+    public String toString() {
+        return "Event{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", popularityScore=" + popularityScore +
+                ", available=" + available +
+                ", location=" + (location != null ? location.getName() : "No location") +
+                '}';
     }
 }
 

@@ -1,49 +1,249 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:sec="">
 <head>
     <meta charset="utf-8">
-    <title>Event Booking page - Welcome and choose an Event</title>
+    <title>Event Booking Page - Welcome and Choose an Event</title>
     <style type="text/css">
         body {
-            width: 800px;
-            margin: auto;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
         }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
         .event-item {
             margin: 10px 0;
-            padding: 10px;
-            border: 4px solid #ddd;
-            border-radius: 4px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fefefe;
+            transition: box-shadow 0.3s ease;
         }
+
+        .event-item:hover {
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
         .event-actions {
-            margin-top: 5px;
+            margin-top: 15px;
         }
+
         .event-actions form {
             display: inline-block;
             margin-right: 10px;
         }
+
+        .event-actions .button {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            width: auto;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .event-actions .button:hover {
+            background-color: #0056b3;
+        }
+
+        .event-actions form button {
+            display: inline-block;
+            padding: 8px 12px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            height: 42px;
+            width: auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .event-actions form button:hover {
+            background-color: darkred;
+        }
+
+
         .booking-section {
-            margin-top: 20px;
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .booking-section h2 {
+            margin-top: 0;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 0.9rem;
+            }
+
+            main {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            input, select {
+                font-size: 0.9rem;
+            }
+
+            .event-item {
+                padding: 15px;
+            }
+        }
+        .navbar-right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 20px;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-left: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .user-info i {
+            margin-right: 8px;
+            color: white;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            color: white;
+            background-color: rgba(255,255,255,0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(255,255,255,0.4);
+        }
+
+        .logout-btn i {
+            margin-right: 8px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
         }
     </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
 <header>
     <h1>Welcome to our Event Booking App</h1>
+    <ul class="navbar-right">
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+            <span class="user-info">
+                <i class="fas fa-user"></i>
+                <span sec:authentication="name">Username</span>
+            </span>
+        </li>
+
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+            <a class="logout-btn" href="/logout">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </li>
+    </ul>
 </header>
+
 <main>
     <h2>Search Events:</h2>
     <form action="/events" method="get">
         <label>
             Event Name:
-            <input type="text" name="searchText"/><br/>
+            <input type="text" name="searchText" placeholder="Search by name..."/>
         </label>
         <label>
             Minimum Rating:
-            <input type="number" name="minRating"/><br/>
+            <input type="number" name="minRating" placeholder="Enter minimum rating"/>
         </label>
         <label>Location</label>
-        <select name="location" class="form-control">
-            <option value="" > </option>
+        <select name="location">
+            <option value="">Select Location</option>
             <option th:each="loc : ${location}" th:value="${loc.id}" th:text="${loc.name}"></option>
         </select>
         <input type="submit" value="Search">
@@ -58,33 +258,37 @@
             Rating: <span th:text="${event.popularityScore}"></span>,
             Location: <span th:text="${event.location.getName()}"></span>
         </label>
+        <th:block sec:authorize="hasRole('ROLE_ADMIN')">
         <div class="event-actions">
+            <a th:href="@{'/events/edit/{eventId}' (eventId=${event.id})}" class="button">Edit</a>
+            <a th:href="@{'/events/details/{eventId}' (eventId=${event.id})}" class="button">Details</a>
             <form th:action="@{'/events/delete/{id}' (id=${event.id})}" method="post">
                 <button type="submit">Delete</button>
             </form>
-            <a th:href="@{'/events/edit/{eventId}' (eventId=${event.id})}" class="button">Edit</a>
-            <a th:href="@{'/events/details/{eventId}' (eventId=${event.id})}" class="button">Details</a>
+        </div>
+        </th:block>
+    </div>
+    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+    <div class="event-actions">
+        <div>
+            <a th:href="@{/events/add-form}" class="button">Add Event</a>
         </div>
     </div>
+    </th:block>
 
-    <div>
-        <a th:href="@{/events/add-form}" class="button">Add Event</a>
-    </div>
 
     <form id="bookingForm" th:action="@{/eventBooking/confirmation}" method="post" class="booking-section">
         <h2>Enter your Name:</h2>
         <label>
             Name:
-            <input type="text" name="attendeeName" required>
+            <input type="text" name="attendeeName" placeholder="Your name" required>
         </label>
-        <br/>
 
         <h2>Choose number of tickets:</h2>
         <label>
             Number of tickets:
-            <input type="number" name="numTickets" min="1" max="10" required>
+            <input type="number" name="numTickets" min="1" max="10" placeholder="Number of tickets" required>
         </label>
-        <br/><br/>
 
         <input type="submit" value="Submit">
     </form>

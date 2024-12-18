@@ -35,10 +35,19 @@ public class EventSeriviceImpl  implements EventService {
     @Override
     @Transactional
     public Optional<Event> saveEvents(Event event) {
-    this.eventRep.deleteByName(event.getName());
+        List<Event> existingEvents = eventRep.findAllByNameAndLocation(event.getName(), event.getLocation());
+        if (!existingEvents.isEmpty()) {
+            throw new RuntimeException("Event with the same name and location already exists");
+        }
 
-    return Optional.of(this.eventRep.save(event));
+        this.eventRep.deleteByName(event.getName());
 
+        return Optional.of(this.eventRep.save(event));
+    }
+    @Override
+    @Transactional
+    public Optional<Event> saveEventsCom(Event event) {
+        return Optional.of(this.eventRep.save(event));
     }
 
     @Override
